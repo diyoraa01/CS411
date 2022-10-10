@@ -1,0 +1,24 @@
+Project Idea #1: 
+
+Many of us listen to music in different languages, and we turn to google to translate the lyrics. Our team wants to create an app that generates lyrics 
+translated to English on the screen as the song is playing, without having the user exit the app and search the translation of the lyrics externally. 
+Alternatively, we also want to be able to translate songs in English to other languages, and give users the option of which language to translate to. For 
+this, we'll be using the Spotify Web Player API for the songs, and Musixmatch for lyrics. Musixmatch already comes with translations, so we wouldn't need 
+to use another API for translation. An extension of this app would be creating AI generated pictures based on the song lyrics. We would just feed the lyrics 
+as input into the AI image generator to create a picture or an entire gallery ( Picture API:  https://www.pexels.com/api/documentation/ )
+
+Framework: Angular
+Database: Mongo DB
+OAuth: Twitter: Twitter ( https://developer.twitter.com/en/docs/twitter-api )
+
+
+Project Idea #2:
+
+Similar to the Akinator app, we let the user have a real or fictional character in mind and give them some questions to answer with 'yes', 'no',
+'don't know' or 'probably not' and the program should guess the answer. We want to modify it by using a photos APi to generate photo results for the answer.
+We would use the Akinator API and a pictures API. 
+
+
+Framework: Angular
+Database: Mongo DB
+OAuth: Twitter: Twitter ( https://developer.twitter.com/en/docs/twitter-api )
