@@ -1,1 +1,6 @@
-The user will be presented with a login page when visiting the website with the option to either log in with google authentication or twitter authentication. If everything goes right, the user will choose one of the options, log in to the OAuth login, and have access to the site. If something goes wrong during this process, the user will be greeted with a “Something went wrong message.”
+The user will be presented with a login page when visiting the website
+with the option to either log in with google authentication or twitter
+authentication. If everything goes right, the user will choose one of
+the options, log in to the OAuth login, and have access to the site. If
+something goes wrong during this process, the user will be greeted
+with a “Something went wrong message.”
