@@ -1,1 +1,6 @@
- A logged in user (see User Story 1) should be presented with an option to choose whether or not they want an AI generated image from the song lyrics received. They will have the option after being redirected to the song page (see User Story 2) to either view the translation or the AI Generated Images for the song. The user will then be able to choose the translation and read the translation for the song they are currently listening to.
+ A logged in user (see User Story 1) should be presented with an option to
+choose whether or not they want an AI generated image from the song lyrics
+received. They will have the option after being redirected to the song page
+(see User Story 2) to either view the translation or the AI Generated Images
+for the song. The user will then be able to choose the translation and read
+the translation for the song they are currently listening to.
