@@ -9,6 +9,7 @@ import { HomeComponent } from './home';
 import { LoginComponent } from './login';
 import { PlayerComponent } from './player';
 
+
 @NgModule({
   imports: [
     BrowserModule,
