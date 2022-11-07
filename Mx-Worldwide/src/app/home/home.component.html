@@ -1,1 +1,6 @@
 <h1>Home Page</h1>
+<form #usersearch = "ngForm" (ngSubmit) = "(usersearch.value)" >
+  <input type = "text" name = "songName" placeholder = "Song Name" ngModel>
+  <br/>
+  <input type = "submit" value = "submit">
+</form>
