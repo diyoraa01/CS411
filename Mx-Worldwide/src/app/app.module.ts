@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
-
+import { FormsModule } from '@angular/forms';
 
 import { appRoutingModule } from './app.routing';
 import { AppComponent } from './app.component';
@@ -15,6 +15,7 @@ import { PlayerComponent } from './player';
     BrowserModule,
     HttpClientModule,
     appRoutingModule,
+    FormsModule
   ],
   declarations: [
       AppComponent,

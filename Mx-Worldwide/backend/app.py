@@ -5,12 +5,21 @@ import requests,sys,spotipy
 import config
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 @app.route('/api/hello')
 def hello():
     return jsonify({'text': 'Hello World!'})
 
+@app.route('/api/search', methods=['POST', 'GET'])
+def search():
+    if request.method == 'POST':
+        songName = request.get_json()['songName']
+        print(songName)
+        trackURL = spotipyID(songName)
+        return jsonify({'trackURL': trackURL})
+    else:
+        return jsonify({'trackURL': 'No track URL'})
 
 def spotipyID(track):
     cid = config.client_id
