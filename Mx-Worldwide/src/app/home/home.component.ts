@@ -10,14 +10,19 @@ export class HomeComponent {
     constructor(private http: HttpClient) {}
 
     songName: string='';
+    trackURL: string='';
 
     search(data:NgForm){
         this.songName = data.value.songName;
         console.log(this.songName);
     
-
         this.http.post(this.ROOT_URL + 'api/search', {'songName': this.songName}).subscribe((res) => {
             console.log(res);
+
+            Object.values(res).forEach((value) => {
+                this.trackURL = value;
+                console.log(this.trackURL);
+            });
         });
     }
 }
