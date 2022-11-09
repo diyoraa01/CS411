@@ -1,6 +1,6 @@
 from flask import Flask, request,jsonify
 from flask_cors import CORS
-from spotipy.oauth2 import SpotifyOAuth,SpotifyClientCredentials
+from spotipy.oauth2 import SpotifyClientCredentials
 import requests,sys,spotipy
 import config
 
@@ -15,7 +15,7 @@ def hello():
 def search():
     if request.method == 'POST':
         songName = request.get_json()['songName']
-        print(songName)
+        # print(songName)
         trackURL = spotipyID(songName)
         return jsonify({'trackURL': trackURL})
     else:
@@ -29,10 +29,9 @@ def spotipyID(track):
 
     # print("Current track: " + track)
     result = sp.search(q='track:'+track, type='track', limit=1)
-    songID = result['tracks']['items'][0]['id']
-    # print("ID: ", songID)
-
-    trackURL = sp.track(songID)['preview_url']
+    # print(result)
+    trackURL = result['tracks']['items'][0]['preview_url']
+    # print(trackURL)
 
     return trackURL
 
