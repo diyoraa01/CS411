@@ -1,6 +1,6 @@
-from flask import Flask, request, redirect, url_for,jsonify
+from flask import Flask, request,jsonify
 from flask_cors import CORS
-from spotipy.oauth2 import SpotifyOAuth
+from spotipy.oauth2 import SpotifyOAuth,SpotifyClientCredentials
 import requests,sys,spotipy
 import config
 
@@ -21,17 +21,16 @@ def search():
     else:
         return jsonify({'trackURL': 'No track URL'})
 
-def spotipyID(track):
-    cid = config.client_id
-    secret = config.client_secret
-    uri = config.redirect_uri
-    oathmanager = SpotifyOAuth(client_id=cid, client_secret=secret, redirect_uri=uri)
-    sp = spotipy.Spotify(oauth_manager=oathmanager)
 
-    print("Current track: " + track)
+
+def spotipyID(track):
+
+    sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(client_id=config.client_id, client_secret=config.client_secret))
+
+    # print("Current track: " + track)
     result = sp.search(q='track:'+track, type='track', limit=1)
     songID = result['tracks']['items'][0]['id']
-    print("ID: ", songID)
+    # print("ID: ", songID)
 
     trackURL = sp.track(songID)['preview_url']
 

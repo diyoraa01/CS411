@@ -24,5 +24,16 @@ export class HomeComponent {
                 console.log(this.trackURL);
             });
         });
+
+        this.reloadAudio(this.trackURL);
+    
+    }
+
+    // Needs to be fixed so that two form submissions aren't needed for the player to be updated
+    reloadAudio(trackUrl:string){
+        var audio = document.getElementById('audioPlayer') as HTMLAudioElement;
+        console.log(trackUrl);
+        audio.setAttribute('src', trackUrl);
+        audio.load();
     }
 }
