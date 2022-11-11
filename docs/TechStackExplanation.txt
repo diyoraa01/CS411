@@ -1,0 +1,10 @@
+We chose to use Node with the Angular framework for our technology stack. When researching possible stacks,
+Node was the main stack that was under consideration, but we did have some internal debate on whether to use Angular or React. 
+We ended up choosing Angular since we didn’t have much experience with it and thought it would be a good challenge to learn as we go. 
+Angular also offers many different libraries that are easy to learn for front-end programming. 
+We chose to use bootstrap because it offers a great routing system between different pages within our application. 
+In the back-end, we chose to use python with the flask library to implement our API calls and system functions. 
+On the front-end, we had another decision to make… Javascript or Typescript. We ended up choosing typescript since it is newer and offers the ability to create frameworks,
+which we believe will be very helpful when we end up incorporating our database. 
+For the database, we had to choose between an object-oriented database or a table-oriented database. We ended up going for the object-oriented database– MongoDB. 
+This is because we think it will be simpler to implement for our intended purposes than a table-oriented database such as mySQL.
