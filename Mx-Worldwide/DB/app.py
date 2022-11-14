@@ -4,12 +4,30 @@ from bson.objectid import ObjectId
 from flask_cors import CORS
 import yaml
 
-app = Flask(__name__)
+# mongodb config
+DB_HOST_MONGO = 'mongodb://db:27017/'
+DB_NAME_MONGO = "mx-worldwide"
+DB_COLLECTION_MONGO = "board"
+DB_USERNAME = 'root'
+DB_PASSWORD = 'admin'
+
+# mongodb connection
+mongo_client = MongoClient(DB_HOST_MONGO)
+mongo_client[DB_NAME_MONGO].authenticate(DB_USERNAME, DB_PASSWORD, mechanism='SCRAM-SHA-1')
+db = mongo_client[DB_NAME_MONGO]
+collection = db[DB_COLLECTION_MONGO]
+
+
 config = yaml.load(open('database.yaml'))
 client = MongoClient(config['uri'])
 # db = client.lin_flask
 db = client['mx_worldwide']
-CORS(app)
+
+
+# start flask app
+app = Flask(__name__)
+CORS(app, resources={r"/*": {"origins": "*"}})
+
 
 @app.route('/')
 def index():
@@ -99,6 +117,16 @@ def onedata(id):
 
         print('\n # Update successful # \n')
         return jsonify({'status': 'Data id: ' + id + ' is updated!'})
+
+
+
+
+
+
+
+
+
+
 
     
 if __name__ == '__main__':
