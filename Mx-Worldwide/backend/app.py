@@ -1,12 +1,14 @@
 from flask import Flask, request,jsonify
 from flask_cors import CORS
 from spotipy.oauth2 import SpotifyClientCredentials
-from googletrans import Translator
-import spotipy, lyricsgenius
+import spotipy, lyricsgenius, deepl
 import config
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
+
+genius = lyricsgenius.Genius(config.GToken)
+translator = deepl.Translator(config.DeeplAuth)
 
 @app.route('/api/hello')
 def hello():
@@ -24,7 +26,6 @@ def search():
 
 @app.route('/api/lyrics', methods=['POST', 'GET'])
 def lyrics():
-    genius = lyricsgenius.Genius(config.GToken)
     if request.method == 'POST':
         artist = genius.search_artist(request.get_json()['artist'], max_songs=0)
         song = genius.search_song(request.get_json()['songName'], artist.name)
@@ -34,14 +35,18 @@ def lyrics():
     else:
         return jsonify({'lyrics': 'No lyrics'})
 
-# @app.route('/api/translate', methods=['POST', 'GET'])
-# def translate():
-#     genius = lyricsgenius.Genius(config.GToken)
-#     artist = genius.search_artist("azealia Banks", max_songs=0)
-#     songlyrics = genius.search_song("Anna Wintour", artist.name)
-#     translator = Translator()
-#     translation = translator.translate("Hello World", dest="es")
-#     return jsonify({'translation': translation.text})
+@app.route('/api/translate', methods=['POST', 'GET'])
+def translate():
+    if request.method == 'POST':
+        lyrics = request.get_json()['lyrics']
+        target_lang = request.get_json()['target_lang']
+        # print(text)
+        # print(target_lang)
+        translated = translator.translate(lyrics, target_lang=target_lang)
+        # print(translated)
+        return jsonify({'translated': translated})
+    else:
+        return jsonify({'translated': 'No translation'})
 
 
 def spotipyID(track):
