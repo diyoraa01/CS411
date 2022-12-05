@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+'''
 from app import app, db
 from flask import Flask, jsonify, request, abort
 from datetime import datetime
 from models.user import User
 from models.music import Music
-
 
 
 
@@ -54,3 +54,4 @@ def get_user():
 
     return jsonify({'musicinfo': User.objects(musicname=name).all()}), 201
 
+'''
