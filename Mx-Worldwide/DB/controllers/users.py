@@ -8,6 +8,8 @@ from models.music import Music
 
 
 
+
+# create a new user after login with OAuth
 @app.route('/create_user', methods=['POST'])
 def create_user():
     if not request.json or not 'name' in request.json or not 'password' in request.json:
@@ -25,7 +27,7 @@ def create_user():
     return jsonify({'userinfo': User.objects.all()}), 201
 
 
-# the 
+# get the user information by (user name or user id)?
 @app.route('/get_user', methods=['GET'])
 def get_user():
     name = request.json

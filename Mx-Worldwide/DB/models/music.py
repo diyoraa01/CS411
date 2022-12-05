@@ -8,5 +8,5 @@ class Music(db.Document):
     author = db.StringField()
     
     def __str__(self):
-        return "musicname:{} - author:{}".format(self.devicename, self.author)
+        return "musicname:{} - author:{}".format(self.musicname, self.author)
 
