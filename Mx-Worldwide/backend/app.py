@@ -45,7 +45,7 @@ def translate():
         # print(target_lang)
         translated = translator.translate_text(lyrics, target_lang=target_lang)
         # print(translated)
-        return jsonify({'translated': translated})
+        return jsonify({'translated': translated.text})
     else:
         return jsonify({'translated': 'No translation'})
 
