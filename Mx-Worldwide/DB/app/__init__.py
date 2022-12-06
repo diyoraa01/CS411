@@ -15,8 +15,7 @@ def get_database():
 
 
 db = get_database()
-print(db)
-user1 = db.users
+u = db.users
 
 #begin code used for login
 login_manager = flask_login.LoginManager()
@@ -33,27 +32,24 @@ def get_database():
 
 
 
-############
 
+###############################################
 
 
 # create a new user after login with OAuth
 @app.route('/create_user', methods=['POST'])
 def create_user():
     re = request.json
-    print(re['name'])
     db['users'].insert_one({
         
         'name': re['name'],
         'gender': re['gender'],
         'language': re['language'],
-        'music_history': re['music_history']
-        
-    #    
+        'music_history': []   
     })
     
     # user = User(name=request.json['name'], password=request.json['password']).save()
-    return jsonify(re), 201
+    return jsonify(re, "Success"), 201
 
 
 # get the user information by (user name or user id)?
@@ -68,41 +64,40 @@ def get_user():
 
 ##########
 
-
+'''
 # create a new music info after a user search a music
 @app.route('/create_music', methods=['POST'])
 def create_music():
-    if not request.json or not 'name' in request.json or not 'password' in request.json:
-        print("Wrong format of request in create_music: ", request)
-        abort(400)
     re = request.json
-    #user = re['user']
     db['music'].insert_one({
         'musicname': re['musicname'],
         'author': re['author']
     })
     
     # user = User(name=request.json['name'], password=request.json['password']).save()
-    return jsonify({'userinfo in create_music'}), 201
-
+    return jsonify(re, "Success"), 201
+'''
 
 # insert a music into user's music history
 @app.route('/insert_music', methods=['POST'])
 def insert_music():
-    if not request.json or not 'name' in request.json or not 'password' in request.json:
-        print("Wrong format of request in create_music: ", request)
-        abort(400)
     re = request.json
     user = re['user']
-    db['music'].insert_one({
-        'musicname': re['musicname'],
-        'author': re['author']
-    })
-    # find user according to name
-    db.users.find({'name': "$user"})
     
+    cur = db.users.find_one({'name': user},{"music_history":1})
+    print(cur)
+    v = cur['music_history']
+    temp = {
+        'musicname': cur,
+        'author': re['author']
+    }
+    v += temp
+    # find user according to name
+    db.users.update_many({'name': user},{"$set": {"music_history": temp}})
+    for i in db['users'].find():
+        print(i)
     # user = User(name=request.json['name'], password=request.json['password']).save()
-    return jsonify({'userinfo in insert_music'}), 201
+    return jsonify(re, "Success"), 201
 
 
 
