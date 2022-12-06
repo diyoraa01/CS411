@@ -17,6 +17,7 @@ def hello():
 @app.route('/api/search', methods=['POST', 'GET'])
 def search():
     if request.method == 'POST':
+        artist = request.get_json()['artist']
         songName = request.get_json()['songName']
         # print(songName)
         trackURL = spotipyID(songName)
@@ -42,22 +43,17 @@ def translate():
         target_lang = request.get_json()['target_lang']
         # print(text)
         # print(target_lang)
-        translated = translator.translate(lyrics, target_lang=target_lang)
+        translated = translator.translate_text(lyrics, target_lang=target_lang)
         # print(translated)
         return jsonify({'translated': translated})
     else:
         return jsonify({'translated': 'No translation'})
 
 
-def spotipyID(track):
-
+def spotipyID(track, artist):
     sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(client_id=config.client_id, client_secret=config.client_secret))
-
-    # print("Current track: " + track)
-    result = sp.search(q='track:'+track, type='track', limit=1)
-    # print(result)
+    result = sp.search(q='track:'+track+' artist:'+artist, type='track', limit=1)
     trackURL = result['tracks']['items'][0]['preview_url']
-    # print(trackURL)
 
     return trackURL
 
