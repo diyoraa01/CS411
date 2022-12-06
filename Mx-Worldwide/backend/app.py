@@ -19,7 +19,7 @@ def search():
     if request.method == 'POST':
         artist = request.get_json()['artist']
         songName = request.get_json()['songName']
-        # print(songName)
+
         trackURL = spotipyID(songName, artist)
         return jsonify({'trackURL': trackURL})
     else:
@@ -30,24 +30,36 @@ def lyrics():
     if request.method == 'POST':
         artist = genius.search_artist(request.get_json()['artist'], max_songs=0)
         song = genius.search_song(request.get_json()['songName'], artist.name)
-        return jsonify({'lyrics': song.lyrics})
-    # Returns a song type which may give access to available translations 
-    #  and translation API might not be needed for those that are available
+
+        return jsonify({'artistName': artist.name,
+                        'songName': song.title,
+                        'originalLyrics': song.lyrics})
     else:
-        return jsonify({'lyrics': 'No lyrics'})
+        return jsonify({'artistName': 'No artist',
+                        'songName': 'No song',
+                        'originalLyrics': 'No lyrics'})
 
 @app.route('/api/translate', methods=['POST', 'GET'])
 def translate():
     if request.method == 'POST':
-        lyrics = request.get_json()['lyrics']
-        target_lang = request.get_json()['target_lang']
-        # print(text)
-        # print(target_lang)
+        lyrics = request.get_json()['originalLyrics']
+        target_lang = request.get_json()['targetLang']
         translated = translator.translate_text(lyrics, target_lang=target_lang)
-        # print(translated)
-        return jsonify({'translated': translated.text})
+
+        originalJson = request.get_json()
+        originalJson['translatedLyrics'] = translated.text
+        originalJson['targetLang'] = target_lang
+
+        return jsonify(originalJson)
     else:
-        return jsonify({'translated': 'No translation'})
+        originalJson = {'artistName': 'No artist',
+                        'songName': 'No song',
+                        'originalLyrics': 'No lyrics'}
+
+        originalJson['translatedLyrics'] = 'No lyrics'
+        originalJson['targetLang'] = 'No language'
+
+        return jsonify(originalJson)
 
 
 def spotipyID(track, artist):
