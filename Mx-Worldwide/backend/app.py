@@ -20,7 +20,7 @@ def search():
         artist = request.get_json()['artist']
         songName = request.get_json()['songName']
         # print(songName)
-        trackURL = spotipyID(songName)
+        trackURL = spotipyID(songName, artist)
         return jsonify({'trackURL': trackURL})
     else:
         return jsonify({'trackURL': 'No track URL'})
