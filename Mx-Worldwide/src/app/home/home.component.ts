@@ -16,7 +16,7 @@ export class HomeComponent {
 
     search(data:NgForm){
         this.songName = data.value.songName;
-        this.artist = data.value.artistName;
+        this.artist = data.value.artist;
         console.log(this.songName);
         console.log(this.artist);
     
