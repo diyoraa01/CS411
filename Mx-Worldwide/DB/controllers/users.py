@@ -20,7 +20,7 @@ def create_user():
         'name': re['name'],
         'gender': re['gender'],
         'language': re['language'],
-        'music_history': {}
+        'music_history': []
     })
     
     # user = User(name=request.json['name'], password=request.json['password']).save()
