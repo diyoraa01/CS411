@@ -7,7 +7,6 @@ import { appRoutingModule } from './app.routing';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home';
 import { LoginComponent } from './login';
-import { PlayerComponent } from './player';
 
 
 @NgModule({
@@ -21,7 +20,6 @@ import { PlayerComponent } from './player';
       AppComponent,
       HomeComponent,
       LoginComponent,
-      PlayerComponent,
   ],
   bootstrap: [AppComponent]
 })
