@@ -2,15 +2,12 @@
 
 
 # app
-initailize the database
+main part
 
-
-# controllers
-defines the interactions 
 
 
 # models
-defines the collections
+shcemas for the collections
 
 
 
