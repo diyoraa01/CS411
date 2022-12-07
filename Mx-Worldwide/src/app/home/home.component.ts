@@ -20,7 +20,7 @@ export class HomeComponent {
         console.log(this.songName);
         console.log(this.artist);
     
-        this.http.post(this.ROOT_URL + 'api/search', {'songName': this.songName}).subscribe((res) => {
+        this.http.post(this.ROOT_URL + 'api/search', {'songName': this.songName, 'artist': this.artist}).subscribe((res) => {
             console.log(res);
 
             Object.values(res).forEach((value) => {
