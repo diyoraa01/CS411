@@ -2,7 +2,10 @@ import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 
-@Component({ templateUrl: 'home.component.html' })
+@Component({ 
+    templateUrl: 'home.component.html',
+    styleUrls: ['home.component.css']
+})
 export class HomeComponent {
 
     readonly ROOT_URL = 'http://127.0.0.1:3052/';
@@ -15,7 +18,7 @@ export class HomeComponent {
     trackURL: string='';
     lyrics: string='Lyrics go here';
     imageURL: string='https://developer.spotify.com/assets/branding-guidelines/icon4@2x.png';
-    translation: string='Translation goes here';
+    translation: string='Welcome to Mx-Worldwide! Enter a song name, artist, preferred language, and enjoy!';
     language: string='EN';
 
     // Send APIs form data
@@ -24,7 +27,7 @@ export class HomeComponent {
         this.artist = data.value.artist;
         console.log(this.songName);
         console.log(this.artist);
-        this.language = data.value.language;
+        this.language = (<HTMLSelectElement>document.getElementById('language')).value;
         console.log(this.language);
     
         // Extract API response for image and track
@@ -56,6 +59,7 @@ export class HomeComponent {
         });
 
         // Extract API response for translated lyrics
+        if (this.language != "EN") {
         this.http.post(this.ROOT_URL + 'api/translate', {'originalLyrics': this.lyrics, 'targetLang': this.language}).subscribe((res) => {
             console.log(res)
             Object.values(res).forEach((value) => {
@@ -63,6 +67,10 @@ export class HomeComponent {
                 console.log(this.translation);
             })
         })
+        }
+        else {
+            this.translation = this.lyrics;
+        }
     }
 
 
