@@ -1,4 +1,4 @@
-<h1 style="text-align:center">Song Search</h1>
+<h1 style="text-align:center;font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;color:purple">Song Search</h1>
 <body>
   <form #usersearch = "ngForm" (ngSubmit) = "search(usersearch)">
     <input type = "text" ngModel name = "songName" placeholder = "Song Name" ngModel>
@@ -33,7 +33,7 @@
       <option value="ZH">Chinese</option>
     </select>
     <br/>
-    <input type = "submit" value = "submit" class="button">
+    <input type = "submit" value = "Submit" class="button" style="color: white;">
   </form>
   <div class="player">
     <img
