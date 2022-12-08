@@ -14,8 +14,9 @@ export class HomeComponent {
     songName: string='';
     artist: string='';
     trackURL: string='';
-    lyrics: string='';
-    imageURL: string='https://i.scdn.co/image/ab67616d0000b2739416ed64daf84936d89e671c';
+    lyrics: string='Lyrics go here';
+    imageURL: string='';
+    translation: string='Translation goes here';
 
     search(data:NgForm){
         this.songName = data.value.songName;
@@ -49,6 +50,14 @@ export class HomeComponent {
                 }
             });
         });
+
+        this.http.post(this.ROOT_URL + 'api/translate', {'originalLyrics': this.lyrics, 'targetLang': 'ES'}).subscribe((res) => {
+            console.log(res)
+            Object.values(res).forEach((value) => {
+                this.translation = value;
+                console.log(this.translation);
+            })
+        })
     }
 
 
