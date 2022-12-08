@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
-import { Pipe, PipeTransform } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({ templateUrl: 'home.component.html' })
 export class HomeComponent {
@@ -11,6 +9,7 @@ export class HomeComponent {
 
     constructor(private http: HttpClient) {}
 
+    // Variable Definition
     songName: string='';
     artist: string='';
     trackURL: string='';
@@ -18,15 +17,16 @@ export class HomeComponent {
     imageURL: string='';
     translation: string='Translation goes here';
 
+    // Send APIs form data
     search(data:NgForm){
         this.songName = data.value.songName;
         this.artist = data.value.artist;
         console.log(this.songName);
         console.log(this.artist);
     
+        // Extract API response for image and track
         this.http.post(this.ROOT_URL + 'api/search', {'songName': this.songName, 'artist': this.artist}).subscribe((res) => {
             console.log(res);
-
             Object.values(res).forEach((value) => {
                 if (value.includes('image')) {
                     this.imageURL = value;
@@ -40,7 +40,8 @@ export class HomeComponent {
         });
 
         this.reloadAudio(this.trackURL);
-    
+
+        // Extract API response for lyrics
         this.http.post(this.ROOT_URL + 'api/lyrics', {'artist': this.artist, 'songName': this.songName}).subscribe((res) => {
             console.log(res)
             Object.values(res).forEach((value) => {
@@ -51,6 +52,7 @@ export class HomeComponent {
             });
         });
 
+        // Extract API response for translated lyrics
         this.http.post(this.ROOT_URL + 'api/translate', {'originalLyrics': this.lyrics, 'targetLang': 'ES'}).subscribe((res) => {
             console.log(res)
             Object.values(res).forEach((value) => {
@@ -61,11 +63,12 @@ export class HomeComponent {
     }
 
 
-    // Needs to be fixed so that two form submissions aren't needed for the player to be updated
+    // Load track audio
     reloadAudio(trackUrl:string){
         var audio = document.getElementById('audioPlayer') as HTMLAudioElement;
         console.log(trackUrl);
         audio.setAttribute('src', trackUrl);
         audio.load();
+        // Check if another audio.load() here fixes need for double load
     }
 }
