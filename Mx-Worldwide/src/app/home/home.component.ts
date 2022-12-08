@@ -18,7 +18,7 @@ export class HomeComponent {
     trackURL: string='';
     lyrics: string='Lyrics go here';
     imageURL: string='https://developer.spotify.com/assets/branding-guidelines/icon4@2x.png';
-    translation: string='Welcome to Mx-Worldwide! Enter a song name, artist, preferred language, and enjoy!';
+    translation: string='Welcome to the Mx-Worldwide Lyrics Translator! Enter a song name, artist, preferred language, and enjoy!';
     language: string='EN';
 
     // Send APIs form data
