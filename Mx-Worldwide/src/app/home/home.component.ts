@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { Pipe, PipeTransform } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({ templateUrl: 'home.component.html' })
 export class HomeComponent {
@@ -13,6 +15,7 @@ export class HomeComponent {
     artist: string='';
     trackURL: string='';
     lyrics: string='';
+    imageURL: string='https://i.scdn.co/image/ab67616d0000b2739416ed64daf84936d89e671c';
 
     search(data:NgForm){
         this.songName = data.value.songName;
@@ -23,9 +26,11 @@ export class HomeComponent {
         this.http.post(this.ROOT_URL + 'api/search', {'songName': this.songName, 'artist': this.artist}).subscribe((res) => {
             console.log(res);
 
-            Object.values(res).forEach((value) => {
-                this.trackURL = value;
+            Object.values(res).forEach(({trackURL,albumArt}) => {
+                this.trackURL = trackURL;
                 console.log(this.trackURL);
+                this.imageURL = albumArt;
+                console.log(this.imageURL);
             });
         });
 
@@ -39,9 +44,6 @@ export class HomeComponent {
             });
         });
     }
-
-
-
 
 
     // Needs to be fixed so that two form submissions aren't needed for the player to be updated
