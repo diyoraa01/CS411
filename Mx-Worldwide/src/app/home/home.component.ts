@@ -16,6 +16,7 @@ export class HomeComponent {
     lyrics: string='Lyrics go here';
     imageURL: string='https://developer.spotify.com/assets/branding-guidelines/icon4@2x.png';
     translation: string='Translation goes here';
+    language: string='EN';
 
     // Send APIs form data
     search(data:NgForm){
@@ -23,6 +24,8 @@ export class HomeComponent {
         this.artist = data.value.artist;
         console.log(this.songName);
         console.log(this.artist);
+        this.language = data.value.language;
+        console.log(this.language);
     
         // Extract API response for image and track
         this.http.post(this.ROOT_URL + 'api/search', {'songName': this.songName, 'artist': this.artist}).subscribe((res) => {
@@ -53,7 +56,7 @@ export class HomeComponent {
         });
 
         // Extract API response for translated lyrics
-        this.http.post(this.ROOT_URL + 'api/translate', {'originalLyrics': this.lyrics, 'targetLang': 'ES'}).subscribe((res) => {
+        this.http.post(this.ROOT_URL + 'api/translate', {'originalLyrics': this.lyrics, 'targetLang': this.language}).subscribe((res) => {
             console.log(res)
             Object.values(res).forEach((value) => {
                 this.translation = value;
