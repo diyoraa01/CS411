@@ -10,13 +10,17 @@ export class HomeComponent {
     constructor(private http: HttpClient) {}
 
     songName: string='';
+    artist: string='';
     trackURL: string='';
+    lyrics: string='';
 
     search(data:NgForm){
         this.songName = data.value.songName;
+        this.artist = data.value.artist;
         console.log(this.songName);
+        console.log(this.artist);
     
-        this.http.post(this.ROOT_URL + 'api/search', {'songName': this.songName}).subscribe((res) => {
+        this.http.post(this.ROOT_URL + 'api/search', {'songName': this.songName, 'artist': this.artist}).subscribe((res) => {
             console.log(res);
 
             Object.values(res).forEach((value) => {
@@ -27,7 +31,18 @@ export class HomeComponent {
 
         this.reloadAudio(this.trackURL);
     
+        this.http.post(this.ROOT_URL + 'api/lyrics', {'artist': this.artist, 'songName': this.songName}).subscribe((res) => {
+            console.log(res)
+            Object.values(res).forEach((value) => {
+                this.lyrics = value;
+                console.log(this.lyrics);
+            });
+        });
     }
+
+
+
+
 
     // Needs to be fixed so that two form submissions aren't needed for the player to be updated
     reloadAudio(trackUrl:string){
