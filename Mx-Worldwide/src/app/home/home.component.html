@@ -1,8 +1,52 @@
-<h1>Home Page</h1>
-<form #usersearch = "ngForm" (ngSubmit) = "search(usersearch)">
-  <input type = "text" ngModel name = "songName" placeholder = "Song Name" ngModel>
-  <br/>
-  <input type = "submit" value = "submit">
-</form>
+<h1 style="text-align:center;font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;color:purple">Lyrics Translator</h1>
+<body>
+  <form #usersearch = "ngForm" (ngSubmit) = "search(usersearch)">
+    <input type = "text" ngModel name = "songName" placeholder = "Song Name" ngModel>
+    <input type = "text" ngModel name = "artist" placeholder = "Artist" ngModel>
+    <select id="language" name="language">
+      <option value="EN">English</option>
+      <option value="BG">Bulgarian</option>
+      <option value="CS">Czech</option>
+      <option value="DA">Danish</option>
+      <option value="DE">German</option>
+      <option value="EL">Greek</option>
+      <option value="ES">Spanish</option>
+      <option value="ET">Estonian</option>
+      <option value="FI">Finnish</option>
+      <option value="FR">French</option>
+      <option value="HU">Hungarian</option>
+      <option value="ID">Indonesian</option>
+      <option value="IT">Italian</option>
+      <option value="JA">Japanese</option>
+      <option value="LT">Lithuanian</option>
+      <option value="LV">Latvian</option>
+      <option value="NL">Dutch</option>
+      <option value="PL">Polish</option>
+      <option value="PT">Portuguese</option>
+      <option value="RO">Romanian</option>
+      <option value="RU">Russian</option>
+      <option value="SK">Slovak</option>
+      <option value="SL">Slovenian</option>
+      <option value="SV">Swedish</option>
+      <option value="TR">Turkish</option>
+      <option value="UK">Ukranian</option>
+      <option value="ZH">Chinese</option>
+    </select>
+    <br/>
+    <input type = "submit" value = "Submit" class="button" style="color: white;">
+  </form>
+  <div class="player">
+    <img
+      src={{imageURL}}
+      class="img-thumbnail"
+      alt="..."
+    />
+    <audio id="audioPlayer" controls></audio>
+  </div>
+  <div class="lyrics">
+    <div class="contianer">
+      {{ translation }}
+    </div>
+  </div>
+</body>
 
-<audio id="audioPlayer" controls></audio>

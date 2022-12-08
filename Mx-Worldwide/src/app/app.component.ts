@@ -16,11 +16,11 @@ export class AppComponent {
   hello: any;
 
   // Flask Hello World Test
-  sayHello() {
-    this.http.get(this.ROOT_URL + 'api/hello').subscribe(data => {
-      this.hello = data as JSON;});
-    console.log(this.hello);
-  }
+  // sayHello() {
+  //   this.http.get(this.ROOT_URL + 'api/hello').subscribe(data => {
+  //     this.hello = data as JSON;});
+  //   console.log(this.hello);
+  // }
 
 
 }

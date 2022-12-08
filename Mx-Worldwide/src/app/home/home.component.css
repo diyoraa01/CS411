@@ -1,0 +1,34 @@
+select {
+  border:none;
+  border-radius: 8 px;
+  background-color: #f1f1f1;
+  border: 5px solid white;
+  width: 15%;
+}
+input {
+  border:none;
+  border-radius: 8px;
+  background-color: #f1f1f1;
+  border: 5px solid white;
+  width: 15%;
+}
+form {
+  text-align: center;
+}
+.button {
+  background-color: purple;
+  border:5px solid white;
+}
+.player {
+  width: 48%;
+  float: left;
+  border-right: 2%;
+}
+.lyrics {
+  width: 48%;
+  text-align: left;
+  float: right;
+}
+.body{
+  background-color:bisque;
+}

@@ -2,15 +2,14 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { HomeComponent } from './home';
 import { LoginComponent } from './login';
-import { PlayerComponent } from './player';
 
 const routes: Routes = [
-    { path: '', component: HomeComponent },
     { path: 'login', component: LoginComponent },
-    { path: 'player', component: PlayerComponent },
+    { path: 'home', component: HomeComponent },
+    
 
-    // otherwise redirect to home
-    { path: '**', redirectTo: '' }
+    // otherwise redirect to login
+    { path: '**', redirectTo: 'login' }
 ];
 
 export const appRoutingModule = RouterModule.forRoot(routes);
