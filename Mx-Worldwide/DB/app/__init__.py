@@ -16,9 +16,11 @@ def get_database():
 
 
 db = get_database()
-u = db.users
-music = db.musics
+users = db.users
+musics = db.musics
 mh = db.music_history
+comments = db.comments
+
 
 #begin code used for login
 login_manager = flask_login.LoginManager()
@@ -34,8 +36,6 @@ def get_database():
 
 
 
-
-
 ###############################################
 # User part
 
@@ -44,7 +44,7 @@ def get_database():
 @app.route('/create_user', methods=['POST'])
 def create_user():
     re = request.json
-    db['users'].insert_one({
+    users.insert_one({
         'name': re['name'],
         'gender': re['gender'],
         'language': re['language']
@@ -53,12 +53,12 @@ def create_user():
     return jsonify(re, "Success"), 201
 
 
-# get the user information by (user name or user id)?
+# get the user information of current user
 @app.route('/get_user_info', methods=['GET'])
 def get_user_info():
     name = 'test02'
 
-    info = db.users.find_one({'name': name},{'name': 1, 'gender': 1, 'language': 1})
+    info = users.find_one({'name': name},{'name': 1, 'gender': 1, 'language': 1})
 
     return jsonify({
             'name': info['name'],
@@ -67,17 +67,24 @@ def get_user_info():
         })
 
 
-# get the user information by (user name or user id)?
+# get the user music history of current user
 @app.route('/get_user_mh', methods=['GET'])
 def get_user_mh():
     name = 'test02'
 
-    info = mh.find({'name': name}, {'musicname': 1, 'artist': 1})
+    list = mh.find({'user_name': name}, {'music_name': 1, 'artist': 1, 'language': 1})
+    print(list)
+    info_doc = []
+    for info in list:
+        print(info)
+        temp = {
+            'musicname': info['music_name'],
+            'artist': info['artist'],
+            'language': info['language']
+        }
+        info_doc.append(temp)
 
-    return jsonify({
-            'musicname': info['musicname'],
-            'artist': info['artist']
-        })
+    return jsonify(info_doc)
 
 
 
@@ -89,7 +96,7 @@ def get_user_mh():
 @app.route('/create_music', methods=['POST'])
 def create_music():
     re = request.json
-    db['music'].insert_one({
+    musics.insert_one({
         'musicname': re['musicname'],
         'artist': re['artist'],
         'language': re['language'],
@@ -108,12 +115,11 @@ def insert_music():
     user_name = re['user_name']
     music_name = re['music_name']
     artist = re['artist']
+    language = re['language']
 
-    mh_doc = {'user_name' : user_name, 'music_name' : music_name, 'artist': artist}
+    mh_doc = {'user_name' : user_name, 'music_name' : music_name, 'artist': artist, 'language': language}
 
-    count = mh.find(mh_doc).count()
-    if (count != 0):
-        mh.insert_one(mh_doc)
+    mh.insert_one(mh_doc)
     
 
     return jsonify("Success")
@@ -128,11 +134,11 @@ def get_lyrics():
     artist = re['artist']
     language = re['language']
 
-    lyrics = db.users.find_one({'musicname': musicname, 'artist': artist, 'language': language},{'lyrics': 1})
+    lyrics = musics.find_one({'musicname': musicname, 'artist': artist, 'language': language},{'lyrics': 1})
 
 
     return jsonify({
-            'lyrics': lyrics
+            'lyrics': lyrics['lyrics']
         })
 
 
