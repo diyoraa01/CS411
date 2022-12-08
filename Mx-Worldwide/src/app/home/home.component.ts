@@ -68,9 +68,6 @@ export class HomeComponent {
             })
         })
         }
-        else {
-            this.translation = this.lyrics;
-        }
     }
 
 
