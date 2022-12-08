@@ -26,11 +26,15 @@ export class HomeComponent {
         this.http.post(this.ROOT_URL + 'api/search', {'songName': this.songName, 'artist': this.artist}).subscribe((res) => {
             console.log(res);
 
-            Object.values(res).forEach(({trackURL,albumArt}) => {
-                this.trackURL = trackURL;
-                console.log(this.trackURL);
-                this.imageURL = albumArt;
-                console.log(this.imageURL);
+            Object.values(res).forEach((value) => {
+                if (value.includes('image')) {
+                    this.imageURL = value;
+                    console.log(this.imageURL);
+                }
+                else {
+                    this.trackURL = value;
+                    console.log(this.trackURL);
+                }
             });
         });
 
@@ -39,8 +43,10 @@ export class HomeComponent {
         this.http.post(this.ROOT_URL + 'api/lyrics', {'artist': this.artist, 'songName': this.songName}).subscribe((res) => {
             console.log(res)
             Object.values(res).forEach((value) => {
-                this.lyrics = value;
-                console.log(this.lyrics);
+                if (value.includes('Lyrics')) {
+                    this.lyrics = value;
+                    console.log(this.lyrics);
+                }
             });
         });
     }
