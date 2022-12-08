@@ -14,7 +14,7 @@ export class HomeComponent {
     artist: string='';
     trackURL: string='';
     lyrics: string='Lyrics go here';
-    imageURL: string='';
+    imageURL: string='https://developer.spotify.com/assets/branding-guidelines/icon4@2x.png';
     translation: string='Translation goes here';
 
     // Send APIs form data
