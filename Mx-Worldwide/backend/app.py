@@ -20,10 +20,12 @@ def search():
         artist = request.get_json()['artist']
         songName = request.get_json()['songName']
 
-        trackURL = spotipyID(songName, artist)
-        return jsonify({'trackURL': trackURL})
+        trackURL,albumURL = spotipyID(songName, artist)
+        return jsonify({'trackURL': trackURL,
+                        'albumArt': albumURL})
     else:
-        return jsonify({'trackURL': 'No track URL'})
+        return jsonify({'trackURL': 'No track',
+                        'albumArt': 'No album'})
 
 @app.route('/api/lyrics', methods=['POST', 'GET'])
 def lyrics():
@@ -65,9 +67,11 @@ def translate():
 def spotipyID(track, artist):
     sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(client_id=config.client_id, client_secret=config.client_secret))
     result = sp.search(q='track:'+track+' artist:'+artist, type='track', limit=1)
-    trackURL = result['tracks']['items'][0]['preview_url']
 
-    return trackURL
+    trackURL = result['tracks']['items'][0]['preview_url']
+    albumURL = result['tracks']['items'][0]['album']['images'][0]['url']
+
+    return trackURL, albumURL
 
 if __name__ == '__main__':
     app.run(debug=True,port="3052")
