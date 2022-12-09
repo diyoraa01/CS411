@@ -40,16 +40,15 @@ def signin():
 
         payload={}
         headers = {
-        'Authorization': 'OAuth oauth_consumer_key= ' + config.consumer_key + ',oauth_signature_method="HMAC-SHA1",oauth_timestamp="1670308388",oauth_nonce="qdvqTTUKl9V",oauth_version="1.0",oauth_signature="%2BEo8x2iqISTj2Ew81yihHUJyXxc%3D"',
-        'Cookie': 'guest_id=v1%3A167028018557823366'
+        'Authorization': 'OAuth oauth_consumer_key= ' + config.consumer_key + ',oauth_signature_method="HMAC-SHA1",oauth_timestamp="1670545136",oauth_nonce="g9VbzEP1Q4K",oauth_version="1.0",oauth_signature="QPkMhLWxc4RaktHpgU0tSCHC1TQ%3D"','Cookie': 'guest_id=v1%3A167028018557823366'
         }
 
         response = requests.request("POST", url, headers=headers, data=payload)
         split = response.text.split("&", 2)
 
-        #print(response.text)
-        #print(response)
-        #print(split)
+        print(response.text)
+        print(response)
+        print(split)
         config.oauth_token = split[0][12:]
         config.oauth_token_secret = split[1][19:]
 
