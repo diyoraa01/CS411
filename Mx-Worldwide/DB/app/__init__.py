@@ -5,7 +5,7 @@ import flask_login
 
 app = Flask(__name__)
 app.config['JSON_SORT_KEYS'] = False
-#CORS(app, resources={r"/*": {"origins": "*"}})
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 #client = MongoClient('localhost', 27017, username='username', password='password')
 client = MongoClient('localhost', 27017)
@@ -95,7 +95,7 @@ def get_user_mh():
 # create a new music info after a user search a music
 @app.route('/create_music', methods=['POST'])
 def create_music():
-    re = request.json
+    re = request.get_json()
     musics.insert_one({
         'musicname': re['musicname'],
         'artist': re['artist'],
@@ -111,7 +111,7 @@ def create_music():
 # insert a music into user's music history
 @app.route('/insert_music', methods=['POST'])
 def insert_music():
-    re = request.json
+    re = request.get_json()
     user_name = re['user_name']
     music_name = re['music_name']
     artist = re['artist']
@@ -129,7 +129,7 @@ def insert_music():
 # get lyrics in a specific language
 @app.route('/get_lyrics', methods=['POST'])
 def get_lyrics():
-    re = request.json
+    re = request.get_json()
     musicname = re['musicname']
     artist = re['artist']
     language = re['language']

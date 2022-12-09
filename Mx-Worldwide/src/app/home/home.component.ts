@@ -9,6 +9,7 @@ import { HttpClient } from '@angular/common/http';
 export class HomeComponent {
 
     readonly ROOT_URL = 'http://127.0.0.1:3052/';
+    readonly ROOT_URL2 = 'http://127.0.0.1:5000/';
 
     constructor(private http: HttpClient) {}
 
@@ -55,6 +56,14 @@ export class HomeComponent {
                     this.lyrics = value;
                     console.log(this.lyrics);
                 }
+                if (value.includes('artist')) {
+                    this.artist = value;
+                    console.log(this.artist);
+                }
+                if (value.includes('songName')) {
+                    this.songName = value;
+                    console.log(this.songName);
+                }
             });
         });
 
@@ -68,6 +77,16 @@ export class HomeComponent {
             })
         })
         }
+
+        
+
+        this.http.post(this.ROOT_URL2 + 'create_music', {'musicname': this.songName, 'artist': this.artist, 
+                                                        'language': this.language, 'lyrics': this.translation}).subscribe((res) => {
+            console.log(res)
+        })  
+                                                            
+
+
     }
 
 
