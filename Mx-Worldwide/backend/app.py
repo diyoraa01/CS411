@@ -1,5 +1,6 @@
 from flask import Flask, request,jsonify, redirect
 from flask_cors import CORS
+from gridfs import Database
 from spotipy.oauth2 import SpotifyClientCredentials
 import spotipy, lyricsgenius, deepl
 import config
@@ -8,13 +9,35 @@ import requests
 from pymongo import MongoClient
 
 
-
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
 app.config['JSON_SORT_KEYS'] = False
 
+
+
+##################################
+#Database
+client = MongoClient('localhost', 27017)
+
+
+def get_database():
+    return client['Mx_world']
+
+
+db = get_database()
+users = db.users
+musics = db.musics
+mh = db.music_history
+comments = db.comments
+
+
+#################################
+
+
 genius = lyricsgenius.Genius(config.GToken)
 translator = deepl.Translator(config.DeeplAuth)
+user_id = ""
+user_name = ""
 
 @app.route('/api/hello')
 def hello():
@@ -100,7 +123,11 @@ def signin2():
         }
 
         response = requests.request("GET", url, headers=headers, data=payload)
+        split = response.text.split("&", 4)
+        user_id = split[2][8:]
+        user_name = split[3][12:]
 
+        users.insert_one({'name': user_name})
 
 
 
@@ -123,18 +150,6 @@ def spotipyID(track, artist):
 
 ############################################################################################################################
 
-client = MongoClient('localhost', 27017)
-
-
-def get_database():
-    return client['Mx_world']
-
-
-db = get_database()
-users = db.users
-musics = db.musics
-mh = db.music_history
-comments = db.comments
 
 
 
