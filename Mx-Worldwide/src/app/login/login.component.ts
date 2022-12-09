@@ -19,7 +19,6 @@ export class LoginComponent {
             if (this.data != undefined)
             {
                 window.location.href = this.data['link'];
-
             }
         });
         console.log(this.data);
