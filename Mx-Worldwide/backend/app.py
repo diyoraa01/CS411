@@ -1,16 +1,43 @@
 from flask import Flask, request,jsonify, redirect
 from flask_cors import CORS
+from gridfs import Database
 from spotipy.oauth2 import SpotifyClientCredentials
 import spotipy, lyricsgenius, deepl
 import config
 import oauth2 as oauth
 import requests
+from pymongo import MongoClient
+
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
+app.config['JSON_SORT_KEYS'] = False
+
+
+
+##################################
+#Database
+client = MongoClient('localhost', 27017)
+
+
+def get_database():
+    return client['Mx_world']
+
+
+db = get_database()
+users = db.users
+musics = db.musics
+mh = db.music_history
+comments = db.comments
+
+
+#################################
+
 
 genius = lyricsgenius.Genius(config.GToken)
 translator = deepl.Translator(config.DeeplAuth)
+user_id = ""
+user_name = ""
 
 @app.route('/api/hello')
 def hello():
@@ -67,18 +94,7 @@ def translate():
 @app.route('/oauth/signin', methods=['POST', 'GET'])
 def signin():
     if request.method == 'GET':
-        consumerkey = config.consumer_key
-        consumersecret = config.consumer_secret
-
-        #url = "https://api.twitter.com/oauth/request_token?oauth_callback=http%3A%2F%2Flocalhost%3A4200%2F"
-        #headers = {"oauth_consumer_key": consumerkey}
-        #response = requests.post(url = url, headers = headers)
-        #print(response.text)
-        
-
-
         url = "https://api.twitter.com/oauth/request_token"
-
         payload={}
         headers = {
         'Authorization': 'OAuth oauth_consumer_key= ' + config.consumer_key + ',oauth_signature_method="HMAC-SHA1",oauth_timestamp="1670545136",oauth_nonce="g9VbzEP1Q4K",oauth_version="1.0",oauth_signature="QPkMhLWxc4RaktHpgU0tSCHC1TQ%3D"','Cookie': 'guest_id=v1%3A167028018557823366'
@@ -86,17 +102,8 @@ def signin():
 
         response = requests.request("POST", url, headers=headers, data=payload)
         split = response.text.split("&", 2)
-
-        print(response.text)
-        print(response)
-        print(split)
         config.oauth_token = split[0][12:]
         config.oauth_token_secret = split[1][19:]
-
-        #print(oauth_token)
-        #print(oauth_token_secret)
-
-
 
         return jsonify({'link': "https://api.twitter.com/oauth/authorize?oauth_token=" + config.oauth_token})
     else:
@@ -108,8 +115,6 @@ def signin2():
         oauth_token = request.get_json()['oauth_token']
         oauth_verifier = request.get_json()['oauth_verifier']
 
-        #print(oauth_token)
-        #print(oauth_verifier)
         url = "https://api.twitter.com/oauth/access_token?oauth_token=" + oauth_token + "&oauth_verifier=" + oauth_verifier
 
         payload={}
@@ -118,8 +123,13 @@ def signin2():
         }
 
         response = requests.request("GET", url, headers=headers, data=payload)
-        #print(response)
-        #print(response.text)
+        split = response.text.split("&", 4)
+        user_id = split[2][8:]
+        user_name = split[3][12:]
+
+        users.insert_one({'name': user_name})
+
+
 
         return jsonify({'status': 'Ok'})
     else:
@@ -135,5 +145,154 @@ def spotipyID(track, artist):
 
     return trackURL, albumURL
 
+
+
+
+############################################################################################################################
+
+
+
+
+
+
+###############################################
+# User part
+
+
+# create a new user after login with OAuth
+@app.route('/create_user', methods=['POST'])
+def create_user():
+    re = request.json
+    users.insert_one({
+        'name': re['name'],
+        'gender': re['gender'],
+        'language': re['language']
+    })
+    
+    return jsonify(re, "Success"), 201
+
+
+# get the user information of current user
+@app.route('/get_user_info', methods=['GET'])
+def get_user_info():
+    name = user_name
+
+    info = users.find_one({'name': name},{'name': 1, 'gender': 1, 'language': 1})
+
+    return jsonify({
+            'name': info['name'],
+            'language': info['language'],
+            'gender': info['gender']
+        })
+
+# get the user information of current user
+@app.route('/get_user', methods=['GET'])
+def get_user():
+    name = user_name
+
+    info = users.find_one({'name': name},{'name': 1})
+
+    return jsonify({
+            'name': info['name']
+        })
+
+# get the user information of current user
+@app.route('/get_all_user', methods=['GET'])
+def get_all_user():
+    name = user_name
+
+    info = users.find({'name': name},{'name': 1})
+    user_list = []
+    for u in info:
+        temp = {
+            'name': u['name']
+        }
+        user_list.append(temp)
+
+    return jsonify({user_list})
+
+
+# get the user music history of current user
+@app.route('/get_user_mh', methods=['GET'])
+def get_user_mh():
+    name = user_name
+
+    list = mh.find({'user_name': name}, {'music_name': 1, 'artist': 1, 'language': 1, 'url': 1})
+    print(list)
+    info_doc = []
+    for info in list:
+        temp = {
+            'musicname': info['music_name'],
+            'artist': info['artist'],
+            'language': info['language'],
+            'url': info['url']
+        }
+        info_doc.append(temp)
+
+    return jsonify(info_doc)
+
+
+
+###############################################
+# Music part
+
+
+# create a new music info after a user search a music
+@app.route('/create_music', methods=['POST'])
+def create_music():
+    re = request.json
+    musics.insert_one({
+        'musicname': re['musicname'],
+        'artist': re['artist'],
+        'language': re['language'],
+        'lyrics': re['lyrics'],
+        'url': re['url']
+    })
+    
+
+    return jsonify(re, "Success")
+
+
+
+# insert a music into user's music history
+@app.route('/insert_music', methods=['POST'])
+def insert_music():
+    re = request.json
+    user_name = re['user_name']
+    music_name = re['music_name']
+    artist = re['artist']
+    language = re['language']
+    url = re['url']
+
+    mh_doc = {'user_name' : user_name, 'music_name' : music_name, 'artist': artist, 'language': language, 'url': url}
+
+    mh.insert_one(mh_doc)
+    
+
+    return jsonify("Success")
+
+
+
+# get lyrics in a specific language
+@app.route('/get_lyrics', methods=['POST'])
+def get_lyrics():
+    re = request.json
+    musicname = re['musicname']
+    artist = re['artist']
+    language = re['language']
+
+    lyrics = musics.find_one({'musicname': musicname, 'artist': artist, 'language': language},{'lyrics': 1})
+
+
+    return jsonify({
+            'lyrics': lyrics['lyrics']
+        })
+
+
+
+
 if __name__ == '__main__':
     app.run(debug=True,port="3052")
+
+    # Get the database
+    db = get_database()

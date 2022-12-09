@@ -68,11 +68,12 @@ def get_user_info():
 
 
 # get the user music history of current user
-@app.route('/get_user_mh', methods=['GET'])
+@app.route('/get_user_mh', methods=['POST'])
 def get_user_mh():
-    name = 'test02'
+    re = request.json
+    name = re['name']
 
-    list = mh.find({'user_name': name}, {'music_name': 1, 'artist': 1, 'language': 1})
+    list = mh.find({'user_name': name}, {'music_name': 1, 'artist': 1, 'language': 1, 'url': 1})
     print(list)
     info_doc = []
     for info in list:
@@ -80,7 +81,8 @@ def get_user_mh():
         temp = {
             'musicname': info['music_name'],
             'artist': info['artist'],
-            'language': info['language']
+            'language': info['language'],
+            'url': info['url']
         }
         info_doc.append(temp)
 
@@ -100,11 +102,12 @@ def create_music():
         'musicname': re['musicname'],
         'artist': re['artist'],
         'language': re['language'],
-        'lyrics': re['lyrics']
+        'lyrics': re['lyrics'],
+        'url': re['url']
     })
     
 
-    return jsonify(re, "Success"), 201
+    return jsonify(re, "Success")
 
 
 
@@ -116,8 +119,9 @@ def insert_music():
     music_name = re['music_name']
     artist = re['artist']
     language = re['language']
+    url = re['url']
 
-    mh_doc = {'user_name' : user_name, 'music_name' : music_name, 'artist': artist, 'language': language}
+    mh_doc = {'user_name' : user_name, 'music_name' : music_name, 'artist': artist, 'language': language, 'url': url}
 
     mh.insert_one(mh_doc)
     
@@ -141,46 +145,6 @@ def get_lyrics():
             'lyrics': lyrics['lyrics']
         })
 
-
-
-###############################################
-# Comment part
-
-'''
-
-def add_comment(music_id,name , email, comment, date):
-    
-    comment_doc = { 'music_id' : music_id, 'name' : name, 'email' : email,'text' : comment, 'date' : date}
-    return db.comments.insert_one(comment_doc)
-
-
-def update_comment(comment_id, user_email, text, date):
-    """
-    Updates the comment in the comment collection. Queries for the comment
-    based by both comment _id field as well as the email field to doubly ensure
-    the user has permission to edit this comment.
-    """
-    # TODO: Create/Update Comments
-    # Use the user_email and comment_id to select the proper comment, then
-    # update the "text" and "date" of the selected comment.
-    response = db.comments.update_one(
-        { "comment_id": comment_id },
-        { "$set": { "text ": text, "date" : date } }
-    )
-
-    return response
-
-
-def delete_comment(comment_id, user_email):
-    """
-    Given a user's email and a comment ID, deletes a comment from the comments
-    collection
-    """
-
-    response = db.comments.delete_one( { "_id": ObjectId(comment_id) } )
-    return response
-
-'''
 
 
 if __name__ == "__main__":   
