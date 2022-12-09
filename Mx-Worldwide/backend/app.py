@@ -1,13 +1,16 @@
 from flask import Flask, request,jsonify, redirect
 from flask_cors import CORS
 from spotipy.oauth2 import SpotifyClientCredentials
-import requests,sys,spotipy
+import spotipy, lyricsgenius, deepl
 import config
 import oauth2 as oauth
 import requests
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
+
+genius = lyricsgenius.Genius(config.GToken)
+translator = deepl.Translator(config.DeeplAuth)
 
 @app.route('/api/hello')
 def hello():
@@ -16,12 +19,50 @@ def hello():
 @app.route('/api/search', methods=['POST', 'GET'])
 def search():
     if request.method == 'POST':
+        artist = request.get_json()['artist']
         songName = request.get_json()['songName']
-        # print(songName)
-        trackURL = spotipyID(songName)
-        return jsonify({'trackURL': trackURL})
+
+        trackURL,albumURL = spotipyID(songName, artist)
+        return jsonify({'trackURL': trackURL,
+                        'albumArt': albumURL})
     else:
-        return jsonify({'trackURL': 'No track URL'})
+        return jsonify({'trackURL': 'No track',
+                        'albumArt': 'No album'})
+
+@app.route('/api/lyrics', methods=['POST', 'GET'])
+def lyrics():
+    if request.method == 'POST':
+        artist = genius.search_artist(request.get_json()['artist'], max_songs=0)
+        song = genius.search_song(request.get_json()['songName'], artist.name)
+
+        return jsonify({'artistName': artist.name,
+                        'songName': song.title,
+                        'originalLyrics': song.lyrics})
+    else:
+        return jsonify({'artistName': 'No artist',
+                        'songName': 'No song',
+                        'originalLyrics': 'No lyrics'})
+
+@app.route('/api/translate', methods=['POST', 'GET'])
+def translate():
+    if request.method == 'POST':
+        lyrics = request.get_json()['originalLyrics']
+        target_lang = request.get_json()['targetLang']
+        translated = translator.translate_text(lyrics, target_lang=target_lang)
+
+        originalJson = request.get_json()
+        originalJson['translatedLyrics'] = translated.text
+        originalJson['targetLang'] = target_lang
+
+        return jsonify(originalJson)
+    else:
+        originalJson = {'artistName': 'No artist',
+                        'songName': 'No song',
+                        'originalLyrics': 'No lyrics'}
+        originalJson['translatedLyrics'] = 'No lyrics'
+        originalJson['targetLang'] = 'No language'
+
+        return jsonify(originalJson)
 
 @app.route('/oauth/signin', methods=['POST', 'GET'])
 def signin():
@@ -84,17 +125,15 @@ def signin2():
     else:
         return jsonify({'status': 'Failed'})
 
-def spotipyID(track):
 
+def spotipyID(track, artist):
     sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(client_id=config.client_id, client_secret=config.client_secret))
+    result = sp.search(q='track:'+track+' artist:'+artist, type='track', limit=1)
 
-    # print("Current track: " + track)
-    result = sp.search(q='track:'+track, type='track', limit=1)
-    # print(result)
     trackURL = result['tracks']['items'][0]['preview_url']
-    # print(trackURL)
+    albumURL = result['tracks']['items'][0]['album']['images'][0]['url']
 
-    return trackURL
+    return trackURL, albumURL
 
 if __name__ == '__main__':
     app.run(debug=True,port="3052")

@@ -1,17 +1,16 @@
 <!-- nav -->
 <nav class="navbar navbar-expand navbar-dark bg-dark">
   <div class="navbar-nav">
-      <a class="nav-item nav-link" routerLink="/">Home</a>
       <a class="nav-item nav-link" routerLink="/login">Login</a>
-      <a class="nav-item nav-link" routerLink="/player">Player</a>
+      <a class="nav-item nav-link" routerLink="/home">Home</a>
   </div>
 </nav>
 
 <!-- main content container -->
 <div class="jumbotron">
   <div class="container">
-      <div class="row">
-          <div class="col-sm-8 offset-sm-2">
+      <div>
+          <div>
               <router-outlet></router-outlet>
           </div>
       </div>
@@ -19,6 +18,6 @@
 </div>
 
 <div>
-  <button (click)="sayHello()">Hello</button>
+  <!-- <button (click)="sayHello()">Hello</button> -->
   <!-- <div *ngFor="let "> -->
 </div>
