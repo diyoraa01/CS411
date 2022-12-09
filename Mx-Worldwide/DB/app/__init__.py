@@ -72,7 +72,7 @@ def get_user_info():
 def get_user_mh():
     name = 'test02'
 
-    list = mh.find({'user_name': name}, {'music_name': 1, 'artist': 1, 'language': 1})
+    list = mh.find({'user_name': name}, {'music_name': 1, 'artist': 1, 'language': 1, 'url': 1})
     print(list)
     info_doc = []
     for info in list:
@@ -80,7 +80,8 @@ def get_user_mh():
         temp = {
             'musicname': info['music_name'],
             'artist': info['artist'],
-            'language': info['language']
+            'language': info['language'],
+            'url': info['url']
         }
         info_doc.append(temp)
 
@@ -100,11 +101,12 @@ def create_music():
         'musicname': re['musicname'],
         'artist': re['artist'],
         'language': re['language'],
-        'lyrics': re['lyrics']
+        'lyrics': re['lyrics'],
+        'url': re['url']
     })
     
 
-    return jsonify(re, "Success"), 201
+    return jsonify(re, "Success")
 
 
 
@@ -116,8 +118,9 @@ def insert_music():
     music_name = re['music_name']
     artist = re['artist']
     language = re['language']
+    url = re['url']
 
-    mh_doc = {'user_name' : user_name, 'music_name' : music_name, 'artist': artist, 'language': language}
+    mh_doc = {'user_name' : user_name, 'music_name' : music_name, 'artist': artist, 'language': language, 'url': url}
 
     mh.insert_one(mh_doc)
     
