@@ -204,7 +204,7 @@ def get_user_info():
             'language': info['language'],
             'gender': info['gender']
         })
-
+        
 # get the user information of current user
 @app.route('/get_user', methods=['GET'])
 def get_user():

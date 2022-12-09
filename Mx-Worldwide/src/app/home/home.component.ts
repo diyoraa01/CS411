@@ -87,12 +87,12 @@ export class HomeComponent {
         }
 
         // Extract user history
-        // this.http.get<USERS>(this.ROOT_URL + 'get_user_mh').subscribe((res) => {
-        //     console.log(res)
-        //     Object.values(res).forEach((value) => {
-        //         this.history = value;
-        //     })
-        // })
+        this.http.get<USERS>(this.ROOT_URL + 'get_user_mh').subscribe((res) => {
+            console.log(res)
+            Object.values(res).forEach((value) => {
+                this.history = value;
+            })
+        })
 
         
 
