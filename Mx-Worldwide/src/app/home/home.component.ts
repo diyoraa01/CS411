@@ -2,6 +2,12 @@ import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 
+interface USERS {
+    musicName: string;
+    artistName: string;
+    lan: string;
+}
+
 @Component({ 
     templateUrl: 'home.component.html',
     styleUrls: ['home.component.css']
@@ -21,6 +27,8 @@ export class HomeComponent {
     imageURL: string='https://developer.spotify.com/assets/branding-guidelines/icon4@2x.png';
     translation: string='Welcome to the Mx-Worldwide Lyrics Translator! Enter a song name, artist, preferred language, and enjoy!';
     language: string='EN';
+    history!: USERS[];
+    
 
     // Send APIs form data
     search(data:NgForm){
@@ -77,6 +85,14 @@ export class HomeComponent {
             })
         })
         }
+
+        // Extract user history
+        // this.http.get<USERS>(this.ROOT_URL + 'get_user_mh').subscribe((res) => {
+        //     console.log(res)
+        //     Object.values(res).forEach((value) => {
+        //         this.history = value;
+        //     })
+        // })
 
         
 
