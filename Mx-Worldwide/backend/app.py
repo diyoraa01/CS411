@@ -7,11 +7,14 @@ import config
 import oauth2 as oauth
 import requests
 from pymongo import MongoClient
+from flask_login import LoginManager
 
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
 app.config['JSON_SORT_KEYS'] = False
+login_manager = LoginManager()
+login_manager.init_app(app)
 
 
 
@@ -36,7 +39,6 @@ comments = db.comments
 
 genius = lyricsgenius.Genius(config.GToken)
 translator = deepl.Translator(config.DeeplAuth)
-user_id = ""
 user_name = ""
 
 @app.route('/api/hello')
@@ -125,6 +127,7 @@ def signin2():
         response = requests.request("GET", url, headers=headers, data=payload)
         split = response.text.split("&", 4)
         user_id = split[2][8:]
+        global user_name
         user_name = split[3][12:]
 
         users.insert_one({'name': user_name})
@@ -188,7 +191,7 @@ def get_user_info():
 # get the user information of current user
 @app.route('/get_user', methods=['GET'])
 def get_user():
-    name = user_name
+    name = 'HHHakuuu'
 
     info = users.find_one({'name': name},{'name': 1})
 
@@ -199,9 +202,8 @@ def get_user():
 # get the user information of current user
 @app.route('/get_all_user', methods=['GET'])
 def get_all_user():
-    name = user_name
 
-    info = users.find({'name': name},{'name': 1})
+    info = users.find()
     user_list = []
     for u in info:
         temp = {
@@ -209,7 +211,7 @@ def get_all_user():
         }
         user_list.append(temp)
 
-    return jsonify({user_list})
+    return jsonify(user_list)
 
 
 # get the user music history of current user
