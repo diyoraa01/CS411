@@ -85,6 +85,9 @@ export class HomeComponent {
             })
         })
         }
+        else {
+            this.translation = this.lyrics
+        }
 
         // Extract user history
         // this.http.get<USERS>(this.ROOT_URL + 'get_user_mh').subscribe((res) => {
