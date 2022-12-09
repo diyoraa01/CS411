@@ -51,12 +51,29 @@ def search():
         artist = request.get_json()['artist']
         songName = request.get_json()['songName']
 
+
         trackURL,albumURL = spotipyID(songName, artist)
+
+        temp(songName, artist, albumURL)
         return jsonify({'trackURL': trackURL,
                         'albumArt': albumURL})
     else:
         return jsonify({'trackURL': 'No track',
                         'albumArt': 'No album'})
+
+
+def temp(name, artist, url):
+    musics.insert_one({
+        'musicname': name,
+        'artist': artist,
+        'url': url
+    })
+
+    mh_doc = {'user_name' : 'HHHakuuu', 'music_name' : name, 'artist': artist, 'url': url}
+
+    mh.insert_one(mh_doc)
+
+
 
 @app.route('/api/lyrics', methods=['POST', 'GET'])
 def lyrics():
@@ -217,16 +234,15 @@ def get_all_user():
 # get the user music history of current user
 @app.route('/get_user_mh', methods=['GET'])
 def get_user_mh():
-    name = user_name
+    name = 'HHHakuuu'
 
-    list = mh.find({'user_name': name}, {'music_name': 1, 'artist': 1, 'language': 1, 'url': 1})
+    list = mh.find({'user_name': name}, {'music_name': 1, 'artist': 1, 'url': 1})
     print(list)
     info_doc = []
     for info in list:
         temp = {
             'musicname': info['music_name'],
             'artist': info['artist'],
-            'language': info['language'],
             'url': info['url']
         }
         info_doc.append(temp)
