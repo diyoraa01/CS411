@@ -185,6 +185,32 @@ def get_user_info():
             'gender': info['gender']
         })
 
+# get the user information of current user
+@app.route('/get_user', methods=['GET'])
+def get_user():
+    name = user_name
+
+    info = users.find_one({'name': name},{'name': 1})
+
+    return jsonify({
+            'name': info['name']
+        })
+
+# get the user information of current user
+@app.route('/get_all_user', methods=['GET'])
+def get_all_user():
+    name = user_name
+
+    info = users.find({'name': name},{'name': 1})
+    user_list = []
+    for u in info:
+        temp = {
+            'name': u['name']
+        }
+        user_list.append(temp)
+
+    return jsonify({user_list})
+
 
 # get the user music history of current user
 @app.route('/get_user_mh', methods=['GET'])
@@ -195,7 +221,6 @@ def get_user_mh():
     print(list)
     info_doc = []
     for info in list:
-        print(info)
         temp = {
             'musicname': info['music_name'],
             'artist': info['artist'],
