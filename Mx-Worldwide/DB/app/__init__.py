@@ -68,9 +68,10 @@ def get_user_info():
 
 
 # get the user music history of current user
-@app.route('/get_user_mh', methods=['GET'])
+@app.route('/get_user_mh', methods=['POST'])
 def get_user_mh():
-    name = 'test02'
+    re = request.json
+    name = re['name']
 
     list = mh.find({'user_name': name}, {'music_name': 1, 'artist': 1, 'language': 1, 'url': 1})
     print(list)
