@@ -126,7 +126,7 @@ def temp(name, artist, url):
         'url': url
     })
 
-    mh_doc = {'user_name' : 'HHHakuuu', 'music_name' : name, 'artist': artist, 'url': url}
+    mh_doc = {'user_name' : user_name, 'music_name' : name, 'artist': artist, 'url': url}
 
     mh.insert_one(mh_doc)
 
@@ -182,7 +182,7 @@ def signin2():
 
 
 ############################################################################################################################
-
+# Database API methods
 
 
 
@@ -221,7 +221,7 @@ def get_user_info():
 # get the user information of current user
 @app.route('/get_user', methods=['GET'])
 def get_user():
-    name = 'HHHakuuu'
+    name = user_name
 
     info = users.find_one({'name': name},{'name': 1})
 
@@ -247,7 +247,7 @@ def get_all_user():
 # get the user music history of current user
 @app.route('/get_user_mh', methods=['GET'])
 def get_user_mh():
-    name = 'HHHakuuu'
+    name = user_name
 
     list = mh.find({'user_name': name}, {'music_name': 1, 'artist': 1, 'url': 1})
     print(list)
