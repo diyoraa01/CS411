@@ -45,10 +45,12 @@ user_name = ""
 
 @app.route('/api/hello')
 def hello():
+    """ Return a friendly HTTP greeting. """
     return jsonify({'text': 'Hello World!'})
 
 @app.route('/api/search', methods=['POST', 'GET'])
 def search():
+    """ Post a search query to the Spotify API and return a preview URL and album art URL. """
     if request.method == 'POST':
         artist = request.get_json()['artist']
         songName = request.get_json()['songName']
@@ -79,6 +81,7 @@ def temp(name, artist, url):
 
 @app.route('/api/lyrics', methods=['POST', 'GET'])
 def lyrics():
+    """ Post a search query to the Genius API and return the lyrics. """
     if request.method == 'POST':
         artist = genius.search_artist(request.get_json()['artist'], max_songs=0)
         song = genius.search_song(request.get_json()['songName'], artist.name)
@@ -93,6 +96,7 @@ def lyrics():
 
 @app.route('/api/translate', methods=['POST', 'GET'])
 def translate():
+    """ Post a translation query to the Deepl API and return the translated lyrics."""
     if request.method == 'POST':
         lyrics = request.get_json()['originalLyrics']
         target_lang = request.get_json()['targetLang']
@@ -159,6 +163,7 @@ def signin2():
 
 
 def spotipyID(track, artist):
+    """ Get the track URL and album art URL from Spotify."""
     sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(client_id=config.client_id, client_secret=config.client_secret))
     result = sp.search(q='track:'+track+' artist:'+artist, type='track', limit=1)
 
