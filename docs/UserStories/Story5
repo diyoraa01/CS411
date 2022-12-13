@@ -1,4 +1,4 @@
 A logged in user (see User Story 1) will be presented with the home page
 (see User Story 2) and be able to search for the song they want to translate.
 They then can search the song and click the option on the redirected page to translate the song to whichever language they prefer. The song will then play
-and the translation to the lyrics will appear similar to closed captions as the song plays.
+and the translation to the lyrics will appear next to the album photo
