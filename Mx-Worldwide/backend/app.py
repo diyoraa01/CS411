@@ -8,7 +8,7 @@ import oauth2 as oauth
 import requests
 from pymongo import MongoClient
 from flask_login import LoginManager
-
+import flask_login
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
@@ -16,6 +16,8 @@ app.config['JSON_SORT_KEYS'] = False
 login_manager = LoginManager()
 login_manager.init_app(app)
 
+class User(flask_login.UserMixin):
+	pass
 
 
 ##################################
@@ -116,7 +118,7 @@ def signin():
         url = "https://api.twitter.com/oauth/request_token"
         payload={}
         headers = {
-        'Authorization': 'OAuth oauth_consumer_key= ' + config.consumer_key + ',oauth_signature_method="HMAC-SHA1",oauth_timestamp="1670545136",oauth_nonce="g9VbzEP1Q4K",oauth_version="1.0",oauth_signature="QPkMhLWxc4RaktHpgU0tSCHC1TQ%3D"','Cookie': 'guest_id=v1%3A167028018557823366'
+        'Authorization': 'OAuth oauth_consumer_key= ' + config.consumer_key + ',oauth_signature_method="HMAC-SHA1",oauth_timestamp="1670893619",oauth_nonce="CWTQdXQTGsK",oauth_version="1.0",oauth_signature="SGgdcq3VEOHuMSZ2uHB2T7sQm28%3D"','Cookie': 'guest_id=v1%3A167028018557823366'
         }
 
         response = requests.request("POST", url, headers=headers, data=payload)
