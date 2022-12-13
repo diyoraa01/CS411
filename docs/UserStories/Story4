@@ -1,4 +1,4 @@
  A logged in user (see User Story 1) should be presented with an option to
- search a song. They will then be redirected to the song page
-(see User Story 2) to view the translation. The user will then be able to choose the translation and read
+ search a song and language to translate to. They will then see the album cover and be able
+(see User Story 2) to view the translation. The user will then be able to read
 the translation for the song they are currently listening to.
