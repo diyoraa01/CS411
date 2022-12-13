@@ -1,5 +1,3 @@
 A logged in user (see User Story 1) will have a history section that records
 all songs they searched and listened to before (see User Story 2). If the user has not used the
-application before, the history part would be empty. If the user
-wants, they can leave comments under the songs and reply to other users. Also,
-they can like other users’ comments and photos.
+application before, the history part would be empty.
