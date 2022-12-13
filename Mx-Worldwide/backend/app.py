@@ -39,6 +39,9 @@ comments = db.comments
 #################################
 
 
+#################################
+#Backend API 
+
 genius = lyricsgenius.Genius(config.GToken)
 translator = deepl.Translator(config.DeeplAuth)
 user_name = ""
@@ -64,20 +67,6 @@ def search():
     else:
         return jsonify({'trackURL': 'No track',
                         'albumArt': 'No album'})
-
-
-def temp(name, artist, url):
-    musics.insert_one({
-        'musicname': name,
-        'artist': artist,
-        'url': url
-    })
-
-    mh_doc = {'user_name' : 'HHHakuuu', 'music_name' : name, 'artist': artist, 'url': url}
-
-    mh.insert_one(mh_doc)
-
-
 
 @app.route('/api/lyrics', methods=['POST', 'GET'])
 def lyrics():
@@ -115,6 +104,33 @@ def translate():
         originalJson['targetLang'] = 'No language'
 
         return jsonify(originalJson)
+
+def spotipyID(track, artist):
+    """ Get the track URL and album art URL from Spotify."""
+    sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(client_id=config.client_id, client_secret=config.client_secret))
+    result = sp.search(q='track:'+track+' artist:'+artist, type='track', limit=1)
+
+    trackURL = result['tracks']['items'][0]['preview_url']
+    albumURL = result['tracks']['items'][0]['album']['images'][0]['url']
+
+    return trackURL, albumURL
+
+#################################
+
+#################################
+
+def temp(name, artist, url):
+    musics.insert_one({
+        'musicname': name,
+        'artist': artist,
+        'url': url
+    })
+
+    mh_doc = {'user_name' : 'HHHakuuu', 'music_name' : name, 'artist': artist, 'url': url}
+
+    mh.insert_one(mh_doc)
+
+
 
 @app.route('/oauth/signin', methods=['POST', 'GET'])
 def signin():
@@ -161,16 +177,6 @@ def signin2():
     else:
         return jsonify({'status': 'Failed'})
 
-
-def spotipyID(track, artist):
-    """ Get the track URL and album art URL from Spotify."""
-    sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(client_id=config.client_id, client_secret=config.client_secret))
-    result = sp.search(q='track:'+track+' artist:'+artist, type='track', limit=1)
-
-    trackURL = result['tracks']['items'][0]['preview_url']
-    albumURL = result['tracks']['items'][0]['album']['images'][0]['url']
-
-    return trackURL, albumURL
 
 
 
