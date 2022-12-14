@@ -1,5 +1,5 @@
 # CS411 Project - Mx-Worldwide 🌎
-Lab B5 Group 1's for BU CS411
+Lab B5 Group 1's project for BU CS411
 
 
 ## Requirements ☑
